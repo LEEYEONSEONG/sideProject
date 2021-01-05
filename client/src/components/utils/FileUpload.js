@@ -66,6 +66,7 @@ function FileUpload({ refreshfunction }) {
             <img
               style={{ minWidth: '350px', width: '300px', height: '240px' }}
               src={`http://localhost:5000/${img}`}
+              alt="image"
             />
           </div>
         ))}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, Button, Form, Input } from 'antd';
 import FileUpload from '../../utils/FileUpload';
+import Axios from 'axios';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -12,7 +13,7 @@ const Continents = [
   { key: 4, value: 'Australia' },
 ];
 
-function UploadProductPage() {
+function UploadProductPage(props) {
   const [title, setTitle] = useState('');
   const [Description, setDescription] = useState('');
   const [Price, setPrice] = useState(0);
@@ -21,6 +22,7 @@ function UploadProductPage() {
 
   const titleChangeHandler = (e) => {
     setTitle(e.currentTarget.value);
+    console.log(title);
   };
 
   const descriptionChangeHandler = (e) => {
@@ -37,6 +39,33 @@ function UploadProductPage() {
 
   const updataImages = (newImages) => {
     setImages(newImages);
+  };
+
+  const submitHandler = () => {
+    if (!title || !Description || !Price || !Cintinent || !Images) {
+      return alert('모든 값을 넣어주셔야 합니다.');
+    }
+    //서버에 채움 값들을 request로 보내준다.
+
+    const body = {
+      //로그인 된 사람의 아이디
+      writer: props.user.userData._id,
+      title: title,
+      description: Description,
+      price: Price,
+      images: Images,
+      continents: Cintinent,
+    };
+
+    Axios.post('/api/product', body).then((res) => {
+      if (res.data.success) {
+        console.log('성공');
+        alert('상품 업로드에 성공 했습니다.');
+        props.history.push('/');
+      } else {
+        alert('상품 업로드에 실패 했습니다. ');
+      }
+    });
   };
 
   return (
@@ -71,7 +100,7 @@ function UploadProductPage() {
         </select>
         <br />
         <br />
-        <Button>확인</Button>
+        <Button onClick={submitHandler}>확인</Button>
       </Form>
     </div>
   );
