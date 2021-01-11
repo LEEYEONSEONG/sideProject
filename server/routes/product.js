@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const { Product } = require('../models/Product');
-const { restart } = require('nodemon');
 
 //=================================
 //             Product
@@ -24,7 +23,7 @@ router.post('/image', (req, res) => {
 
   upload(req, res, (err) => {
     if (err) {
-      return restart.json({ success: false, err });
+      return req.json({ success: false, err });
     }
     return res.json({
       success: true,
